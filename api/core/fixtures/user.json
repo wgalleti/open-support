@@ -1,0 +1,22 @@
+[
+  {
+    "model": "core.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$HYPYcs6hGkfY$/EiQvmMrg5wC1gRPLPa5IVtwJXpXmAOB2hGCOubz3x0=",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@hifuzion.com.br",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2020-08-04T18:15:01.091Z",
+      "is_atendente": false,
+      "is_cliente": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

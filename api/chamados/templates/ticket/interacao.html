@@ -1,0 +1,79 @@
+{% extends 'base_email_tickets.html' %}
+{% block content %}
+    <div style=" width: 100%; padding: 20px; background: #4B4B4D; color: #FFFFFF">
+        <table border="0" cellpadding="0" cellspacing="0" style=" width: 50%; margin: 0 auto; font-size: 22px;">
+            <tr>
+                <td style="font-size: 12px; font-weight: 200; width: 80px; text-align: right; padding-right: 4px;">Ticket</td>
+                <td style="font-size: 18px; font-weight: bold; width:40px;">{{ data.id }}</td>
+                <td style="font-size: 12px; font-weight: 200; width: 80px; text-align: right; padding-right: 4px;">Abertura</td>
+                <td style="font-size: 18px; font-weight: bold;  width: 270px;">{{ data.inicio }}</td>
+                <td style="font-size: 12px; font-weight: 200; width: 80px; text-align: right; padding-right: 4px;">Cliente</td>
+                <td style="font-size: 18px; font-weight: bold; width: auto;">{{ data.cliente.nome }}</td>
+            </tr>
+        </table>
+    </div>
+    <table border="0" cellpadding="0" cellspacing="0" style=" width: 800px; margin: 0 auto; padding: 20px;">
+        <tr>
+            <td style="font-size: 32px;">{{ data.titulo }}</td>
+        </tr>
+        <tr>
+            {% autoescape off %}
+                <td style="font-size: 22px;">{{ data.descricao |safe  }}</td>
+            {% endautoescape %}
+        </tr>
+
+        {% for arquivo in data.arquivos.all %}
+            <tr>
+                <td style="font-size: 12px;">
+                    <a style="text-decoration: none; color: #35459E;" href="{{ arquivo.arquivo }}" target="_blank">{{ arquivo.nome }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table border="0" cellpadding="0" cellspacing="0" style="width: 800px; margin: 0 auto; padding: 20px;">
+        {% if interacao.usuario_logado.is_cliente %}
+            <tr>
+                <td>{{ interacao.ticket.cliente.nome }}</td>
+            </tr>
+            <tr>
+                {% autoescape off %}
+                    <td>{{ interacao.descricao |safe  }}</td>
+                {% endautoescape %}
+            </tr>
+        {% else %}
+            <tr style="background: #4B4B4D; color: #FFFFFF;">
+                <td style="padding: 20px;">
+                    <span style="font-size: 16px; text-transform: uppercase;">{{ interacao.usuario_logado.username }}</span>
+                    <span style="font-size: 12px;">em {{ interacao.data }}</span>
+                </td>
+            </tr>
+            <tr>
+                {% autoescape off %}
+                    <td style="padding: 0 20px; max-width: 800px; overflow: auto;">{{ interacao.descricao |safe  }}</td>
+                {% endautoescape %}
+            </tr>
+            {% for arquivo in interacao.arquivos.all %}
+                <tr>
+                    <td style="font-size: 12px;">
+                        <a style="text-decoration: none; color: #35459E;" href="{{ arquivo.arquivo }}" target="_blank">{{ arquivo.nome }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+
+    <div style=" width: 100%; padding: 20px; background: #4B4B4D; color: #FFFFFF">
+        <table border="0" cellpadding="0" cellspacing="0" style="width: 50%; margin: 0 auto; padding: 20px;">
+            <tr>
+                <td style="font-size: 12px; font-weight: 200; width: 80px; text-align: right; padding-right: 4px;">Prioridade</td>
+                <td style="font-size: 18px; font-weight: bold;">{{ data.get_prioridade_display }}</td>
+                <td style="font-size: 12px; font-weight: 200; width: 80px; text-align: right; padding-right: 4px;">Status</td>
+                <td style="font-size: 18px; font-weight: bold;">{{ data.get_status_display }}</td>
+                <td style="font-size: 12px; font-weight: 200; width: 80px; text-align: right; padding-right: 4px;">Atendente</td>
+                <td style="font-size: 18px; font-weight: bold;">{{ data.atendente.nome }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}
+

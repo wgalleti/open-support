@@ -1,0 +1,29 @@
+{
+    "items": [
+        {
+            "key": "@base-accent",
+            "value": "#418B50"
+        },
+        {
+            "key": "@base-text-color",
+            "value": "#4B4B4D"
+        },
+        {
+            "key": "@base-border-radius",
+            "value": "2px"
+        },
+        {
+            "key": "@datagrid-selection-bg",
+            "value": "#418B50"
+        },
+        {
+            "key": "@datagrid-row-selected-color",
+            "value": "rgba(255, 255, 255, 1)"
+        }
+    ],
+    "baseTheme": "generic.light",
+    "outputColorScheme": "hifuzion",
+    "makeSwatch": false,
+    "version": "20.1.6",
+    "widgets": []
+}
