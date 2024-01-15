@@ -1,0 +1,67 @@
+version: '3.5'
+services:
+  support-postgres:
+    image: postgres:latest
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    hostname: support-postgres
+    container_name: support-postgres
+    environment:
+      POSTGRES_USER: support
+      POSTGRES_PASSWORD: support
+      POSTGRES_DB: support
+    networks:
+      backend:
+        aliases:
+          - postgres
+    restart: unless-stopped
+  support-redis:
+    image: redis:6.0.9
+    ports:
+      - "6379:6379"
+    hostname: support-redis
+    container_name: support-redis
+    networks:
+      backend:
+        aliases:
+          - redis
+    restart: unless-stopped
+  support-api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    command: >
+      /bin/sh -c "
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    expose:
+      - "8001"
+      - "8888"
+    ports:
+      - "8000:8000"
+      - "8888:8888"
+    hostname: support_api
+    depends_on:
+      - support-postgres
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "localhost:127.0.0.1"
+    env_file:
+      - ./api/.env
+    volumes:
+      - ./api:/app
+    networks:
+        backend:
+          aliases:
+            - api
+    restart: unless-stopped
+networks:
+  backend:
+    name: backend
+    driver: bridge

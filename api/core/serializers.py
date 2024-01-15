@@ -1,4 +1,4 @@
-from rest_auth.models import TokenModel
+from dj_rest_auth.models import TokenModel
 from rest_framework import serializers
 
 from core.models import Atendente, Cliente, User, ClienteAtualizacao, GrupoCliente

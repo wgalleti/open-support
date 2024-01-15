@@ -1,15 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from django_celery_beat.models import SolarSchedule
 
 from core.models import User, EmailErro, Atendente, GrupoCliente
 
-admin.site.unregister(SolarSchedule)
 admin.site.register(EmailErro)
 
-admin.site.site_header = 'Projeto Base HiFuzion'
-admin.site.site_title = 'HiFuzion'
+admin.site.site_header = 'Base Support App'
+admin.site.site_title = 'Open Support'
 
 
 @admin.register(User)

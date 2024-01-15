@@ -77,7 +77,6 @@ class OrdemServicoViewSet(BaseViewSet):
 
     @action(methods=['get'], detail=False, url_path='status')
     def status(self, request, pk=None):
-        print(request)
         return Response(choice_para_lista(OrdemServico.STATUS))
 
 

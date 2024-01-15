@@ -23,9 +23,6 @@ THIRD_APPS = [
     'rest_framework',
     'dj_rest_auth',
     'rest_framework.authtoken',
-    'django_celery_beat',
-    'django_celery_results',
-    'drf_yasg',
 ]
 LOCAL_APPS = [
     'core',

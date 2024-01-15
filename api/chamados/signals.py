@@ -3,7 +3,6 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from .models import TicketInteracao, Ticket
-from .tasks import email_ticket
 
 
 @receiver(post_save, sender=Ticket)
@@ -16,8 +15,8 @@ def save_ticket(sender, instance: Ticket, created, **kwargs):
 
     post_save.connect(save_ticket, sender=sender)
 
-    if created:
-        email_ticket.delay(instance.id, f'Novo Ticket ({instance.id})')
+    # if created:
+        # email_ticket.delay(instance.id, f'Novo Ticket ({instance.id})')
 
 
 @receiver(post_save, sender=TicketInteracao)
@@ -32,4 +31,4 @@ def save_interacao(sender, instance: TicketInteracao, **kwargs):
         instance.ticket.departamento = instance.departamento
 
     instance.ticket.save()
-    email_ticket.delay(instance.ticket.id, f'Nova Interação - Atendimento ({instance.ticket_id})', True)
+    # email_ticket.delay(instance.ticket.id, f'Nova Interação - Atendimento ({instance.ticket_id})', True)

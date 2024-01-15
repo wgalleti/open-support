@@ -2,7 +2,6 @@ from datetime import date
 
 from decouple import config
 
-from core.firebird import FirebirdConnector
 from servicos.models import OrdemServico, OrdemServicoItem, Servico
 from servicos.serializers import OrdemServicoItemSerializer
 
@@ -10,67 +9,6 @@ from servicos.serializers import OrdemServicoItemSerializer
 class OrdemServicoService:
     def __init__(self, os: OrdemServico):
         self.os = os
-
-    def integrar_hifuzion(self):
-        conn_str = config('FIREBIRD_URL')
-        conn = FirebirdConnector(connection=conn_str)
-
-        sql_venda = '''
-            insert into venda_integracao (
-              id,
-              filial_id,
-              data,
-              forma_pagamento_id,
-              cliente_id
-            ) values (
-              ?,
-              ?,
-              ?,
-              ?,
-              ?
-            ) returning id      
-        '''
-
-        sql_venda_itens = '''
-            insert into venda_integracao_item (
-              venda_integracao_id,
-              produto_id,
-              quantidade,
-              unitario,
-              descricao
-            ) values (
-              ?,
-              ?,
-              ?,
-              ?,
-              ?
-            )            
-        '''
-
-        id_venda = conn.next('gen_venda_integracao_id')
-
-        data_venda = (
-            id_venda,
-            1,
-            date.today() if self.os.data_encerramento is None else self.os.data_encerramento,
-            1,
-            self.os.cliente.codigo_cliente,
-        )
-
-        conn.execute(sql_venda, data_venda, auto_commit=False)
-
-        for i in self.os.ordemservicoitem_set.all():
-            data_venda_item = (
-                id_venda,
-                i.servico.codigo_erp,
-                1,
-                i.valor,
-                i.descricao
-            )
-
-            conn.execute(sql_venda_itens, data_venda_item, auto_commit=False)
-
-        conn.commit()
 
     def preparar_finalizacao(self, user):
         tecnicos = [dict(tecnico=t.tecnico.nome,
