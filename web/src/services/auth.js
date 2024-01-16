@@ -22,10 +22,13 @@ export function signIn (credentials) {
   return Http
     .save('auth/login/', credentials)
     .then(response => {
-      const { token = null } = response
-      localStorage.setItem('token', token)
+      const { key = null } = response
+      localStorage.setItem('token', key)
       Http.refreshAuth()
-      return response
+      return {
+        token: key,
+        user: null
+      }
     })
     .catch(err => {
       throw new Error('Não foi possível efetuar o login. Erro' + err.toString())

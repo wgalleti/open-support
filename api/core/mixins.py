@@ -4,16 +4,12 @@ from django.utils.translation import gettext as _
 from rest_framework import serializers, viewsets
 
 
-class TempoMixin(models.Model):
-    """
-    Controle de tempos
-    Adiciona colunas criado_em e atualizado_em
-    """
-    criado_em = models.DateTimeField(
+class TimeModelMixin(models.Model):
+    created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name=_('created at')
     )
-    atualizado_em = models.DateTimeField(
+    updated_at = models.DateTimeField(
         auto_now=True,
         verbose_name=_('update at')
     )
@@ -22,12 +18,8 @@ class TempoMixin(models.Model):
         abstract = True
 
 
-class UsuarioMixin(models.Model):
-    """
-    Controle de Usuário logado
-    Adiciona coluna usuario_logado
-    """
-    usuario_logado = models.ForeignKey(
+class UserModelMixin(models.Model):
+    logged_user = models.ForeignKey(
         to=get_user_model(),
         blank=True,
         null=True,
@@ -40,12 +32,8 @@ class UsuarioMixin(models.Model):
         abstract = True
 
 
-class AtivoMixin(models.Model):
-    """
-    Controle de registro ativo
-    Adiciona coluna ativo
-    """
-    ativo = models.BooleanField(
+class ActiveModelMixin(models.Model):
+    is_active = models.BooleanField(
         default=True
     )
 
@@ -53,21 +41,14 @@ class AtivoMixin(models.Model):
         abstract = True
 
 
-class UsuarioSerializerMixin(serializers.ModelSerializer):
-    """
-    Serializer com usuário logado
-    """
+class UserSerializerMixin(serializers.ModelSerializer):
     logged_user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
 
 class BaseViewSet(viewsets.ModelViewSet):
-    """
-    Visão padrão herança
-    """
     ordering_fields = '__all__'
 
     def list(self, request, *args, **kwargs):
-        # Verifica se quer listar todos os dados
         if bool(self.request.query_params.get('all', False)):
             self.pagination_class = None
 

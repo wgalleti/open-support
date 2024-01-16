@@ -1,12 +1,12 @@
 from rest_framework import routers
 
-from core.views import AtendenteViewSet, ClienteViewSet, UserViewSet, ClienteAtualizacaoViewSet, GrupoClienteViewSet
+from core.views import AttendantViewSet, CustomerViewSet, UserViewSet, CustomerGroupViewSet, CustomerUpdateViewSet
 
 r = routers.DefaultRouter()
 r.register('users', UserViewSet)
-r.register('atendentes', AtendenteViewSet)
-r.register('clientes', ClienteViewSet)
-r.register('clientesatualizacoes', ClienteAtualizacaoViewSet)
-r.register('grupos', GrupoClienteViewSet)
+r.register('attendants', AttendantViewSet)
+r.register('customers', CustomerViewSet)
+r.register('updates', CustomerUpdateViewSet)
+r.register('groups', CustomerGroupViewSet)
 
 urlpatterns = r.urls

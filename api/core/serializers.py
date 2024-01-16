@@ -1,18 +1,18 @@
 from dj_rest_auth.models import TokenModel
 from rest_framework import serializers
 
-from core.models import Atendente, Cliente, User, ClienteAtualizacao, GrupoCliente
+from core.models import User, Customer, Attendant, CustomerUpdate, CustomerGroup
 
 
 class UserSerializer(serializers.ModelSerializer):
     groups = serializers.SerializerMethodField('_groups')
     permissions = serializers.SerializerMethodField('_permissions')
-    cliente = serializers.SerializerMethodField('_cliente')
+    customer = serializers.SerializerMethodField('_customer')
 
-    def _cliente(self, user: User):
+    def _customer(self, user: User):
         c = None
-        if user.is_cliente:
-            c = Cliente.objects.filter(usuario_acesso=user).first()
+        if user.is_customer:
+            c = Customer.objects.filter(usuario_acesso=user).first()
         return c if c is None else c.id
 
     def _groups(self, user: User):
@@ -45,38 +45,37 @@ class TokenSerializer(serializers.ModelSerializer):
         fields = ('token', 'user',)
 
 
-class AtendenteSerializer(serializers.ModelSerializer):
+class AttendantSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Atendente
+        model = Attendant
         fields = '__all__'
 
 
-class ClienteSerializer(serializers.ModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
 
-    nome = serializers.SerializerMethodField('_nome')
+    name = serializers.SerializerMethodField('_name')
 
-    def _nome(self, obj: Cliente):
-        return obj.nome.title()
+    def _name(self, obj: Customer):
+        return obj.name.title()
 
     class Meta:
-        model = Cliente
+        model = Customer
         fields = '__all__'
 
 
-class ClienteAtualizacaoSerializer(serializers.ModelSerializer):
+class CustomerUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ClienteAtualizacao
+        model = CustomerUpdate
         fields = '__all__'
 
 
-class GrupoClienteSerializer(serializers.ModelSerializer):
-    quantidade = serializers.SerializerMethodField('_quantidade')
-    clientes = ClienteSerializer(many=True, read_only=True)
+class CustomerGroupSerializer(serializers.ModelSerializer):
+    count = serializers.SerializerMethodField('_count')
+    customers = CustomerSerializer(many=True, read_only=True)
 
-
-    def _quantidade(self, obj: GrupoCliente):
-        return obj.quantidade
+    def _count(self, obj: CustomerGroup):
+        return obj.count
 
     class Meta:
-        model = GrupoCliente
+        model = CustomerGroup
         fields = '__all__'

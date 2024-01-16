@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 
-from core.models import Cliente, Atendente, User
+from core.models import User, Customer, Attendant
 
 
 class UsuarioService:
@@ -10,7 +10,7 @@ class UsuarioService:
         self.created = False
         self.user = None
         self.new_password = None
-        self.nivel = User.NIVEL1
+        self.nivel = User.LEVEL1
 
     def add(self):
         self.user, self.created = get_user_model().objects.update_or_create(**self.data)
@@ -37,9 +37,9 @@ class UsuarioService:
             pk = data.usuario_acesso_id if data.usuario_acesso is not None else None
             email = data.email
             is_active = True
-            nivel = data.nivel
+            nivel = data.level
 
-            separate = data.nome.split(' ')
+            separate = data.name.split(' ')
 
             if len(separate) == 1:
                 first_name = separate[0].title()
@@ -78,10 +78,10 @@ class UsuarioService:
             self.data = _extract_dict(self.origin.copy())
             return True
 
-        if type(self.origin) in [Cliente, Atendente]:
+        if type(self.origin) in [Customer, Attendant]:
             self.data = _extract_model(self.origin)
-            self.data['is_atendente'] = type(self.origin) == Atendente
-            self.data['is_cliente'] = type(self.origin) == Cliente
+            self.data['is_attendant'] = type(self.origin) == Attendant
+            self.data['is_customer'] = type(self.origin) == Customer
 
             return True
 

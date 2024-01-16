@@ -1,10 +1,10 @@
 from django.core.mail import EmailMultiAlternatives
 
-from core.models import EmailErro
-from suporte import settings
+from core.models import MailError
+from support import settings
 
 
-class HifuzionMail:
+class SupportMail:
 
     def __init__(self, assunto, conteudo, para, html=True):
         self.conteudo = conteudo
@@ -20,7 +20,7 @@ class HifuzionMail:
         try:
             msg.send(False)
         except Exception as e:
-            EmailErro(log=f'Classe: {e.__class__.__name__} \nErro: {str(e)}',
+            MailError(log=f'Classe: {e.__class__.__name__} \nErro: {str(e)}',
                       smtp=settings.EMAIL_HOST,
                       usuario=settings.EMAIL_HOST_USER,
                       senha=settings.EMAIL_HOST_PASSWORD).save()

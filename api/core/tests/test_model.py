@@ -9,7 +9,7 @@ class AtendenteTest(TestCase):
         self.atendente = AtendenteFactory.create()
 
     def test_representation(self):
-        self.assertEqual(str(self.atendente), self.atendente.nome)
+        self.assertEqual(str(self.atendente), self.atendente.name)
 
     def test_user_is_create(self):
         self.assertIsNotNone(self.atendente.usuario_acesso)
@@ -20,7 +20,7 @@ class ClienteTest(TestCase):
         self.cliente = ClienteFactory.create()
 
     def test_representation(self):
-        self.assertEqual(str(self.cliente), f'{self.cliente.codigo_cliente}-{self.cliente.nome}')
+        self.assertEqual(str(self.cliente), f'{self.cliente.codigo_cliente}-{self.cliente.name}')
 
     def test_user_is_create(self):
         self.assertIsNotNone(self.cliente.usuario_acesso)

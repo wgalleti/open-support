@@ -12,7 +12,7 @@ class AtendenteFactory(factory.django.DjangoModelFactory):
         return f"{self.nome.lower()}@hifuzion.com.br"
 
     class Meta:
-        model = 'core.Atendente'
+        model = 'core.Attendant'
 
 
 class ClienteFactory(factory.django.DjangoModelFactory):
@@ -30,4 +30,4 @@ class ClienteFactory(factory.django.DjangoModelFactory):
     contato_telefone = factory.Faker('random_number', digits=14)
 
     class Meta:
-        model = 'core.Cliente'
+        model = 'core.Customer'

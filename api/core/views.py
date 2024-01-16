@@ -1,20 +1,19 @@
-from core.helpers import choice_para_lista
-from core.mixins import BaseViewSet
-from core.models import Atendente, Cliente, User, GrupoCliente
-from core.serializers import (
-    AtendenteSerializer,
-    ClienteSerializer,
-    UserSerializer,
-    ClienteAtualizacaoSerializer,
-    GrupoClienteSerializer,
-)
-from django.http import HttpResponse
-from django.utils.encoding import smart_str
 from rest_framework import response
 from rest_framework.decorators import action
 from rest_framework.exceptions import ParseError
 from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 from rest_framework.response import Response
+
+from core.helpers import choice_para_lista
+from core.mixins import BaseViewSet
+from core.models import User, Attendant, Customer, CustomerUpdate, CustomerGroup
+from core.serializers import (
+    AttendantSerializer,
+    CustomerSerializer,
+    UserSerializer,
+    CustomerUpdateSerializer,
+    CustomerGroupSerializer,
+)
 
 
 class UserViewSet(BaseViewSet):
@@ -24,12 +23,12 @@ class UserViewSet(BaseViewSet):
 
     @action(methods=['get'], detail=False)
     def niveis(self, request, pk=None):
-        return response.Response(choice_para_lista(User.NIVEIS))
+        return response.Response(choice_para_lista(User.LEVELS))
 
 
-class AtendenteViewSet(BaseViewSet):
-    serializer_class = AtendenteSerializer
-    queryset = Atendente.objects.all().order_by('-pk')
+class AttendantViewSet(BaseViewSet):
+    serializer_class = AttendantSerializer
+    queryset = Attendant.objects.all().order_by('-pk')
 
     def get_queryset(self):
         qs = self.queryset
@@ -41,9 +40,9 @@ class AtendenteViewSet(BaseViewSet):
         return qs
 
 
-class ClienteViewSet(BaseViewSet):
-    serializer_class = ClienteSerializer
-    queryset = Cliente.objects.all().order_by('-pk')
+class CustomerViewSet(BaseViewSet):
+    serializer_class = CustomerSerializer
+    queryset = Customer.objects.all().order_by('-pk')
 
     search_fields = ('=id', 'nome',)
 
@@ -63,12 +62,12 @@ class ClienteViewSet(BaseViewSet):
         return qs
 
     @action(methods=['GET'], detail=False)
-    def existe(self, request, pk=None):
+    def exists(self, request, pk=None):
         email = request.query_params.get('email', None)
         if email is None:
             return response.Response('')
 
-        if len(Cliente.objects.filter(email=email)) > 0:
+        if len(Customer.objects.filter(email=email)) > 0:
             raise ParseError('Cliente já existe', code=400)
 
         if len(User.objects.filter(email=email)) > 0:
@@ -77,40 +76,40 @@ class ClienteViewSet(BaseViewSet):
         return response.Response('')
 
 
-class ClienteAtualizacaoViewSet(BaseViewSet):
-    serializer_class = ClienteAtualizacaoSerializer
-    queryset = Cliente.objects.all().order_by('-pk')
+class CustomerUpdateViewSet(BaseViewSet):
+    serializer_class = CustomerUpdateSerializer
+    queryset = CustomerUpdate.objects.all().order_by('-pk')
 
 
-class GrupoClienteViewSet(BaseViewSet):
-    serializer_class = GrupoClienteSerializer
-    queryset = GrupoCliente.objects.all()
+class CustomerGroupViewSet(BaseViewSet):
+    serializer_class = CustomerGroupSerializer
+    queryset = CustomerGroup.objects.all()
 
     @action(methods=['POST'], detail=True)
-    def remover(self, request, pk=None):
-        obj: GrupoCliente = self.get_object()
-        cliente = self.request.data.get('id', None)
+    def remove(self, request, pk=None):
+        obj: CustomerGroup = self.get_object()
+        cliente = self.request.date.get('id', None)
 
         if cliente is None:
-            return Response(status=400, data='Cliente é obrigatório')
+            return Response(status=400, data='Customer is required')
 
         try:
-            obj.clientes.filter(id=cliente).delete()
-            return Response(status=200, data='Cliente removido')
+            obj.customers.filter(id=cliente).delete()
+            return Response(status=200, data='Customer removed')
         except Exception as e:
-            return Response(status=400, data='Cliente é obrigatório')
+            return Response(status=400, data='Customer is required')
 
     @action(methods=['POST'], detail=True)
-    def adicionar(self, request, pk=None):
-        obj: GrupoCliente = self.get_object()
-        cliente = self.request.data.get('id', None)
+    def to_add(self, request, pk=None):
+        obj: CustomerGroup = self.get_object()
+        cliente = self.request.date.get('id', None)
 
         if cliente is None:
-            return Response(status=400, data='Cliente é obrigatório')
+            return Response(status=400, data='Customer is required')
 
         try:
-            obj.clientes.add(cliente)
+            obj.customers.add(cliente)
             obj.save()
-            return Response(status=200, data='Cliente adicionado')
+            return Response(status=200, data='Customer to add')
         except Exception as e:
-            return Response(status=400, data='Cliente é obrigatório')
+            return Response(status=400, data='Customer is required')

@@ -2,9 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from core.models import User, EmailErro, Atendente, GrupoCliente
+from core.models import User, MailError, Attendant, CustomerGroup
 
-admin.site.register(EmailErro)
+admin.site.register(MailError)
 
 admin.site.site_header = 'Base Support App'
 admin.site.site_title = 'Open Support'
@@ -25,11 +25,11 @@ class UserAdmin(UserAdmin):
     )
 
 
-@admin.register(Atendente)
-class AtendenteAdmin(admin.ModelAdmin):
+@admin.register(Attendant)
+class AttendantAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(GrupoCliente)
-class GrupoClienteAdmin(admin.ModelAdmin):
+@admin.register(CustomerGroup)
+class CustomerGroupAdmin(admin.ModelAdmin):
     pass
