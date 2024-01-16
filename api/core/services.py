@@ -1,6 +1,5 @@
+from core.models import Attendant, Customer, User
 from django.contrib.auth import get_user_model
-
-from core.models import User, Customer, Attendant
 
 
 class UsuarioService:
@@ -22,16 +21,10 @@ class UsuarioService:
 
     def _normalize(self):
         def _extract_dict(data):
-            id = data.get('id', None)
+            id = data.get("id", None)
             if id is None:
-                return dict(
-                    email=data.get('email'),
-                    defaults=data
-                )
-            return dict(
-                id=id,
-                defaults=data
-            )
+                return dict(email=data.get("email"), defaults=data)
+            return dict(id=id, defaults=data)
 
         def _extract_model(data):
             pk = data.usuario_acesso_id if data.usuario_acesso is not None else None
@@ -39,16 +32,16 @@ class UsuarioService:
             is_active = True
             nivel = data.level
 
-            separate = data.name.split(' ')
+            separate = data.name.split(" ")
 
             if len(separate) == 1:
                 first_name = separate[0].title()
-                last_name = ''
+                last_name = ""
                 username = separate[0].lower()
             else:
                 first_name = separate[0].title()
                 last_name = separate[-1].title()
-                username = f'{first_name.lower()}.{last_name.lower()}'
+                username = f"{first_name.lower()}.{last_name.lower()}"
 
             if pk is not None:
                 return dict(
@@ -59,8 +52,8 @@ class UsuarioService:
                         username=username,
                         email=email,
                         is_active=is_active,
-                        nivel=nivel
-                    )
+                        nivel=nivel,
+                    ),
                 )
 
             return dict(
@@ -70,8 +63,8 @@ class UsuarioService:
                     last_name=last_name,
                     username=username,
                     is_active=is_active,
-                    nivel=nivel
-                )
+                    nivel=nivel,
+                ),
             )
 
         if isinstance(self.origin, dict):
@@ -80,12 +73,12 @@ class UsuarioService:
 
         if type(self.origin) in [Customer, Attendant]:
             self.data = _extract_model(self.origin)
-            self.data['is_attendant'] = type(self.origin) == Attendant
-            self.data['is_customer'] = type(self.origin) == Customer
+            self.data["is_attendant"] = type(self.origin) == Attendant
+            self.data["is_customer"] = type(self.origin) == Customer
 
             return True
 
-        raise Exception('Unable to normalize data to user')
+        raise Exception("Unable to normalize data to user")
 
     def link_user(self, data):
         self.origin = data

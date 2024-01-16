@@ -1,1 +1,1 @@
-default_app_config = 'tickets.apps.ChamadosConfig'
+default_app_config = "tickets.apps.ChamadosConfig"

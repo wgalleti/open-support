@@ -9,110 +9,291 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MailError',
+            name="MailError",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('log', models.TextField()),
-                ('smtp', models.CharField(max_length=100)),
-                ('username', models.CharField(max_length=100)),
-                ('password', models.CharField(max_length=100)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateTimeField(auto_now_add=True)),
+                ("log", models.TextField()),
+                ("smtp", models.CharField(max_length=100)),
+                ("username", models.CharField(max_length=100)),
+                ("password", models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
-                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('is_attendant', models.BooleanField(default=False)),
-                ('is_customer', models.BooleanField(default=False)),
-                ('photo', models.ImageField(blank=True, null=True, upload_to='profiles/')),
-                ('level', models.IntegerField(choices=[(1, 'Support 1'), (2, 'Support 2'), (3, 'Support 3')], default=1)),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "username",
+                    models.CharField(
+                        error_messages={
+                            "unique": "A user with that username already exists."
+                        },
+                        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                        max_length=150,
+                        unique=True,
+                        validators=[
+                            django.contrib.auth.validators.UnicodeUsernameValidator()
+                        ],
+                        verbose_name="username",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="first name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="last name"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True, max_length=254, verbose_name="email address"
+                    ),
+                ),
+                (
+                    "is_staff",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates whether the user can log into this admin site.",
+                        verbose_name="staff status",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
+                        verbose_name="active",
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now, verbose_name="date joined"
+                    ),
+                ),
+                ("is_attendant", models.BooleanField(default=False)),
+                ("is_customer", models.BooleanField(default=False)),
+                (
+                    "photo",
+                    models.ImageField(blank=True, null=True, upload_to="profiles/"),
+                ),
+                (
+                    "level",
+                    models.IntegerField(
+                        choices=[(1, "Support 1"), (2, "Support 2"), (3, "Support 3")],
+                        default=1,
+                    ),
+                ),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-                'abstract': False,
+                "verbose_name": "user",
+                "verbose_name_plural": "users",
+                "abstract": False,
             },
             managers=[
-                ('objects', django.contrib.auth.models.UserManager()),
+                ("objects", django.contrib.auth.models.UserManager()),
             ],
         ),
         migrations.CreateModel(
-            name='Attendant',
+            name="Attendant",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('email', models.EmailField(max_length=254)),
-                ('level', models.IntegerField(choices=[(1, 'Support 1'), (2, 'Support 2'), (3, 'Support 3')], default=1)),
-                ('active', models.BooleanField(default=True)),
-                ('hourly_cost_value', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=15, null=True)),
-                ('hourly_sell_value', models.DecimalField(blank=True, decimal_places=2, default=0, max_digits=15, null=True)),
-                ('access_user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("email", models.EmailField(max_length=254)),
+                (
+                    "level",
+                    models.IntegerField(
+                        choices=[(1, "Support 1"), (2, "Support 2"), (3, "Support 3")],
+                        default=1,
+                    ),
+                ),
+                ("active", models.BooleanField(default=True)),
+                (
+                    "hourly_cost_value",
+                    models.DecimalField(
+                        blank=True,
+                        decimal_places=2,
+                        default=0,
+                        max_digits=15,
+                        null=True,
+                    ),
+                ),
+                (
+                    "hourly_sell_value",
+                    models.DecimalField(
+                        blank=True,
+                        decimal_places=2,
+                        default=0,
+                        max_digits=15,
+                        null=True,
+                    ),
+                ),
+                (
+                    "access_user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Attendant',
-                'verbose_name_plural': 'Attendants',
+                "verbose_name": "Attendant",
+                "verbose_name_plural": "Attendants",
             },
         ),
         migrations.CreateModel(
-            name='Customer',
+            name="Customer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('customer_code', models.IntegerField(blank=True, null=True)),
-                ('name', models.CharField(max_length=100)),
-                ('email', models.EmailField(max_length=254)),
-                ('contact', models.CharField(blank=True, max_length=100, null=True)),
-                ('phone', models.CharField(blank=True, max_length=100, null=True)),
-                ('active', models.BooleanField(default=True)),
-                ('app_version', models.CharField(blank=True, max_length=20, null=True)),
-                ('access_user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("customer_code", models.IntegerField(blank=True, null=True)),
+                ("name", models.CharField(max_length=100)),
+                ("email", models.EmailField(max_length=254)),
+                ("contact", models.CharField(blank=True, max_length=100, null=True)),
+                ("phone", models.CharField(blank=True, max_length=100, null=True)),
+                ("active", models.BooleanField(default=True)),
+                ("app_version", models.CharField(blank=True, max_length=20, null=True)),
+                (
+                    "access_user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Customer',
-                'verbose_name_plural': 'Customers',
+                "verbose_name": "Customer",
+                "verbose_name_plural": "Customers",
             },
         ),
         migrations.CreateModel(
-            name='CustomerGroup',
+            name="CustomerGroup",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('customers', models.ManyToManyField(blank=True, to='core.customer')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("customers", models.ManyToManyField(blank=True, to="core.customer")),
             ],
         ),
         migrations.CreateModel(
-            name='CustomerUpdate',
+            name="CustomerUpdate",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(auto_now_add=True)),
-                ('version', models.CharField(max_length=20)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('customer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.customer')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateTimeField(auto_now_add=True)),
+                ("version", models.CharField(max_length=20)),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "customer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="core.customer"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Customer Update',
-                'verbose_name_plural': 'Customers Updates',
+                "verbose_name": "Customer Update",
+                "verbose_name_plural": "Customers Updates",
             },
         ),
     ]

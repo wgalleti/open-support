@@ -24,3 +24,15 @@ api.log
 worker.log
 beat.log
 media/
+__pycache__/
+.pre-commit-config.yaml
+.Python
+*.pyc
+*.pyo
+.venv/
+.vscode/
+.idea/
+.pytest_cache/
+.mypy_cache/
+.pyright/
+.black

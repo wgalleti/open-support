@@ -17,5 +17,3 @@ def save_add_auth_user(instance):
 def save_atualizacao(sender, instance: CustomerUpdate, **kwargs):
     instance.customer.version = instance.version
     instance.customer.save()
-
-

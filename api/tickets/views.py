@@ -1,38 +1,50 @@
+from core.helpers import choice_para_lista
+from core.mixins import BaseViewSet
 from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-
-from tickets.models import Attachment, Ticket, TicketInteraction
-from tickets.serializers import AnexoSerializer, TicketSerializer, TicketInteracaoSerializer, TicketDetalheSerializer
-from tickets.services import TicketDashboardService, TicketService, TicketRapidoService
-from core.helpers import choice_para_lista
-from core.mixins import BaseViewSet
 from services.serializers import OrdemServicoSerializer
+from tickets.models import Attachment, Ticket, TicketInteraction
+from tickets.serializers import (
+    AnexoSerializer,
+    TicketDetalheSerializer,
+    TicketInteracaoSerializer,
+    TicketSerializer,
+)
+from tickets.services import TicketDashboardService, TicketRapidoService, TicketService
 
 
 class AnexoViewSet(BaseViewSet):
     serializer_class = AnexoSerializer
-    queryset = Attachment.objects.all().order_by('-pk')
-    parser_classes = (MultiPartParser, FormParser,)
+    queryset = Attachment.objects.all().order_by("-pk")
+    parser_classes = (
+        MultiPartParser,
+        FormParser,
+    )
     permission_classes = (AllowAny,)
 
 
 class TicketViewSet(BaseViewSet):
     serializer_class = TicketSerializer
-    queryset = Ticket.objects.all().order_by('pk')
-    filter_fields = ('id', 'status', 'prioridade', 'departamento',)
+    queryset = Ticket.objects.all().order_by("pk")
+    filter_fields = (
+        "id",
+        "status",
+        "prioridade",
+        "departamento",
+    )
 
     def get_queryset(self):
         qs = self.queryset
 
-        if self.request.query_params.get('all', None) is not None:
+        if self.request.query_params.get("all", None) is not None:
             return qs
 
-        de = self.request.query_params.get('de')
-        ate = self.request.query_params.get('ate')
+        de = self.request.query_params.get("de")
+        ate = self.request.query_params.get("ate")
 
         if de is not None:
             qs = qs.filter(inicio__gte=de)
@@ -40,12 +52,14 @@ class TicketViewSet(BaseViewSet):
         if ate is not None:
             qs = qs.filter(inicio__lte=ate)
 
-        excludes = ['sem_atendimento']
+        excludes = ["sem_atendimento"]
         custom_filters = dict(
             finalizados=Q(status__in=[Ticket.DEPLOYED]),
-            sem_atendimento=Q(id__in=TicketInteraction.objects.all().values_list('ticket', flat=True))
+            sem_atendimento=Q(
+                id__in=TicketInteraction.objects.all().values_list("ticket", flat=True)
+            ),
         )
-        custom_filter = self.request.query_params.get('personalizado', None)
+        custom_filter = self.request.query_params.get("personalizado", None)
 
         if custom_filter is not None:
             try:
@@ -65,17 +79,20 @@ class TicketViewSet(BaseViewSet):
                 qs = qs.exclude(status__in=[Ticket.DEPLOYED])
 
         if self.request.user.is_atendente:
-            qs = qs.filter(Q(atendente__usuario_acesso=self.request.user) | Q(nivel__lte=self.request.user.level))
+            qs = qs.filter(
+                Q(atendente__usuario_acesso=self.request.user)
+                | Q(nivel__lte=self.request.user.level)
+            )
 
             if custom_filter is None:
                 qs = qs.exclude(status__in=[Ticket.DEPLOYED])
 
         if self.request.user.is_superuser:
-            qs = qs.order_by('pk')
+            qs = qs.order_by("pk")
 
         return qs
 
-    @action(methods=['post'], detail=False)
+    @action(methods=["post"], detail=False)
     def rapido(self, request, pk=None):
         try:
             data, user = request.date, request.user
@@ -85,37 +102,37 @@ class TicketViewSet(BaseViewSet):
         except Exception as e:
             return Response(status=400, data=str(e))
 
-    @action(methods=['get'], detail=False)
+    @action(methods=["get"], detail=False)
     def dashboard(self, requests, pk=None):
         ds = TicketDashboardService()
         response = dict(
             status=ds.get_status(),
             totais=ds.get_totais(),
             totais_clientes=ds.get_totais_cliente(),
-            totais_atendente=ds.get_totais_atendente()
+            totais_atendente=ds.get_totais_atendente(),
         )
         return Response(response)
 
-    @action(methods=['get'], detail=True)
+    @action(methods=["get"], detail=True)
     def detalhes(self, requests, pk=None):
         self.queryset = Ticket.objects.all()
 
         t = self.get_object()
         return Response(TicketDetalheSerializer(t).data)
 
-    @action(methods=['get'], detail=False)
+    @action(methods=["get"], detail=False)
     def prioridades(self, requests, pk=None):
         return Response(choice_para_lista(Ticket.PRIORITIES))
 
-    @action(methods=['get'], detail=False)
+    @action(methods=["get"], detail=False)
     def status(self, requests, pk=None):
         return Response(choice_para_lista(Ticket.STATUS))
 
-    @action(methods=['get'], detail=False)
+    @action(methods=["get"], detail=False)
     def departamentos(self, requests, pk=None):
         return Response(choice_para_lista(Ticket.DEPARTMENTS))
 
-    @action(methods=['post'], detail=True)
+    @action(methods=["post"], detail=True)
     def upgrade(self, request, pk=None):
         obj = self.get_object()
         try:
@@ -125,7 +142,7 @@ class TicketViewSet(BaseViewSet):
         except Exception as e:
             return Response(status=400, data=str(e))
 
-    @action(methods=['post'], detail=True)
+    @action(methods=["post"], detail=True)
     def gerar_os(self, request, pk=None):
         try:
             obj = self.get_object()
@@ -138,4 +155,4 @@ class TicketViewSet(BaseViewSet):
 
 class TicketInteracaoViewSet(BaseViewSet):
     serializer_class = TicketInteracaoSerializer
-    queryset = TicketInteraction.objects.all().order_by('pk')
+    queryset = TicketInteraction.objects.all().order_by("pk")

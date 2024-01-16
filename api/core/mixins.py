@@ -5,14 +5,8 @@ from rest_framework import serializers, viewsets
 
 
 class TimeModelMixin(models.Model):
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('created at')
-    )
-    updated_at = models.DateTimeField(
-        auto_now=True,
-        verbose_name=_('update at')
-    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("created at"))
+    updated_at = models.DateTimeField(auto_now=True, verbose_name=_("update at"))
 
     class Meta:
         abstract = True
@@ -24,8 +18,8 @@ class UserModelMixin(models.Model):
         blank=True,
         null=True,
         on_delete=models.DO_NOTHING,
-        related_name='%(app_label)s_%(class)s_logged_user',
-        verbose_name=_('user in logged')
+        related_name="%(app_label)s_%(class)s_logged_user",
+        verbose_name=_("user in logged"),
     )
 
     class Meta:
@@ -33,9 +27,7 @@ class UserModelMixin(models.Model):
 
 
 class ActiveModelMixin(models.Model):
-    is_active = models.BooleanField(
-        default=True
-    )
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
@@ -46,10 +38,10 @@ class UserSerializerMixin(serializers.ModelSerializer):
 
 
 class BaseViewSet(viewsets.ModelViewSet):
-    ordering_fields = '__all__'
+    ordering_fields = "__all__"
 
     def list(self, request, *args, **kwargs):
-        if bool(self.request.query_params.get('all', False)):
+        if bool(self.request.query_params.get("all", False)):
             self.pagination_class = None
 
         return super().list(request, *args, **kwargs)

@@ -1,8 +1,7 @@
-from core.models import Cliente, Atendente
+from core.models import Atendente, Cliente
+from core.services import UsuarioService
 from core.tests.factories import AtendenteFactory, ClienteFactory
 from tickets.tests.factories import TicketFactory, TicketInteracaoFactory
-
-from core.services import UsuarioService
 
 
 def save_add_auth_user(instance):
@@ -30,7 +29,7 @@ processa_clientes()
 processa_atendentes()
 
 for u in User.objects.all():
-    u.set_password('123')
+    u.set_password("123")
     u.save()
 
 TicketFactory.create_batch(20)

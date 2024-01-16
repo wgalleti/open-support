@@ -2,7 +2,7 @@ import factory
 
 
 class AtendenteFactory(factory.django.DjangoModelFactory):
-    nome = factory.Faker('first_name', locale='pt_BR')
+    nome = factory.Faker("first_name", locale="pt_BR")
 
     @factory.lazy_attribute
     def email(self):
@@ -12,12 +12,12 @@ class AtendenteFactory(factory.django.DjangoModelFactory):
         return f"{self.nome.lower()}@hifuzion.com.br"
 
     class Meta:
-        model = 'core.Attendant'
+        model = "core.Attendant"
 
 
 class ClienteFactory(factory.django.DjangoModelFactory):
-    codigo_cliente = factory.Faker('random_number', digits=3)
-    nome = factory.Faker('company', locale='pt_BR')
+    codigo_cliente = factory.Faker("random_number", digits=3)
+    nome = factory.Faker("company", locale="pt_BR")
 
     @factory.lazy_attribute
     def email(self):
@@ -26,8 +26,8 @@ class ClienteFactory(factory.django.DjangoModelFactory):
 
         return f"contact@{self.nome.replace(',', '').replace('.', '').split(' ')[0].lower()}.com"
 
-    contato = factory.Faker('first_name', locale='pt_BR')
-    contato_telefone = factory.Faker('random_number', digits=14)
+    contato = factory.Faker("first_name", locale="pt_BR")
+    contato_telefone = factory.Faker("random_number", digits=14)
 
     class Meta:
-        model = 'core.Customer'
+        model = "core.Customer"
